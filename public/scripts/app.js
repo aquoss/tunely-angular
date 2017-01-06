@@ -11,27 +11,36 @@ angular
   // the second argument is a function that defines the capacities
   // of the controller.
 
-function AlbumsIndexController () {
+AlbumsIndexController.$inject = ['$http'];
+function AlbumsIndexController ( $http ) {
   var vm = this;
   vm.newAlbum = {};
 
-  vm.newAlbum = {
-      name: 'Viva Hate',
-      artistName: 'Morrissey'
-  };
+  $http({
+    method: 'GET',
+    url: '/api/albums'
+  }).then(handleSuccess, handleError);
 
-  vm.albums = [
-    {
-      name: 'Coming Home',
-      artistName: 'Leon Bridges'
-    },
-    {
-      name: 'Are We There',
-      artistName: 'Sharon Van Etten'
-    },
-    {
-      name: 'The Queen is Dead',
-      artistName: 'The Smiths'
+  function handleSuccess(res){
+    vm.albums = res.data;
+  }
+  function handleError(res){
+    console.log('error', res);
+  }
+
+  vm.createAlbum = function(){
+    $http({
+      method: 'POST',
+      url: '/api/albums',
+      data: {
+        name: vm.newAlbum.name,
+        artistName: vm.newAlbum.artistName,
+        genres: vm.newAlbum.genres.split(',')
+      }
+    }).then(handlePostSuccess, handleError);
+
+    function handlePostSuccess(res){
+      vm.albums.push(res.data);
     }
-  ];
+  }
 }
