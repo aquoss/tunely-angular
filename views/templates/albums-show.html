@@ -30,8 +30,22 @@
                     <li class="list-group-item">
                       <h4 class="inline-header">Songs:</h4>
                       <div class="list-group-item" ng-repeat="song in albumsShowCtrl.album.songs">
-                        ({{song.trackNumber}}){{song.name}}
+                        <button type="button" ng-hide="editing" ng-click="editing=true" class="btn btn-sm btn-info glyphicon glyphicon-pencil"></button>
+                        <button type="button" ng-click="albumsShowCtrl.deleteSong(song)" ng-hide="editing" class="btn btn-sm btn-danger glyphicon glyphicon-trash"></button>
+                        <input type="text" ng-show="editing" ng-model="song.trackNumber" class="form-control">
+                        <span ng-hide="editing">({{song.trackNumber}}) {{song.name}}</span>
+                        <input type="text" ng-show="editing" ng-model="song.name" class="form-control">
+                        <button type="submit" ng-show="editing" ng-click="editing=false; albumsShowCtrl.editSong(song)" class="btn btn-sm btn-success">Save</button>
+                        <button type="button" ng-show="editing" ng-click="editing=false" class="btn btn-sm btn-secondary">Cancel</button>
                       </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <form>
+                        <input type="text" ng-model="newSong.trackNumber" class="form-control" placeholder="Track Number">
+                        <input type="text" ng-model="newSong.name" class="form-control" placeholder="Track Name">
+                        <button type="submit" ng-click="albumsShowCtrl.createSong(newSong)" class="btn btn-success"> Add New Song</button>
+                      </form>
                     </li>
                   </ul>
                 </div>
